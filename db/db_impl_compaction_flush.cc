@@ -1717,9 +1717,13 @@ Status DBImpl::BackgroundCompaction(bool* made_progress,
       if (cmp > 0){
         // cut current start level file, interator output file
         if (output_index + 1 < output_level_files->num_files) {
-          CheckFileSliceConsistency(start_level_files->files[start_index].file_metadata, cstart_smallest_key, coutput_largest_key, c->column_family_data()->internal_comparator());
-            c->edit()->AddFileSlice(c->start_level(), c->output_level(), start_level_files->files[start_index].file_metadata,
-              output_level_files->files[output_index].file_metadata, cstart_smallest_key, coutput_largest_key, is_contain_smallest);
+          CheckFileSliceConsistency(start_level_files->files[start_index].file_metadata,
+                                    cstart_smallest_key, coutput_largest_key,
+                                    c->column_family_data()->internal_comparator());
+            c->edit()->AddFileSlice(c->start_level(), c->output_level(),
+                                    start_level_files->files[start_index].file_metadata,
+              output_level_files->files[output_index].file_metadata,
+                                    cstart_smallest_key, coutput_largest_key, is_contain_smallest);
           is_contain_smallest = false;
           if (c->column_family_data()->internal_comparator().Compare(cstart_smallest_key, coutput_largest_key) < 0){
             //CheckFileSliceConsistency(start_level_files->files[start_index].file_metadata, cstart_smallest_key, coutput_largest_key, c->column_family_data()->internal_comparator());

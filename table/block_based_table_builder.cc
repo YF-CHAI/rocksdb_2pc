@@ -650,8 +650,8 @@ Status BlockBasedTableBuilder::Finish() {
   assert(!r->closed);
   r->closed = true;
 
-  std::cout << "BlockBasedTableBuilder::Finish raw_size:" << r->props.raw_key_size + r->props.raw_value_size
-    << "file size:" << FileSize() << std::endl;
+  //std::cout << "\n BlockBasedTableBuilder::Finish raw_size:" << r->props.raw_key_size + r->props.raw_value_size
+  //<< "file size:" << FileSize() << std::endl;//cyf test
   // To make sure properties block is able to keep the accurate size of index
   // block, we will finish writing all index entries here and flush them
   // to storage after metaindex block is written.

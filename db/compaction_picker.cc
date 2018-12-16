@@ -390,7 +390,8 @@ Compaction* CompactionPicker::MergeFileSlices(
     level_input_files.level = merge_task->level;
     compact_options.output_file_size_limit = mutable_cf_options.MaxFileSizeForLevel(merge_task->level);
     compact_options.compression = kNoCompression;
-    std::cout << "CompactionPicker::MergeFileSlices compact_options.output_file_size_limit:" << compact_options.output_file_size_limit << std::endl; 
+    std::cout << "CompactionPicker::MergeFileSlices compact_options.output_file_size_limit:"
+              << compact_options.output_file_size_limit << std::endl;
     vstorage->GetOverlappingInputs(merge_task->level, &(merge_task->smallest_key), &(merge_task->largest_key),
       &(level_input_files.files), -1, nullptr, false, true);
     
@@ -409,7 +410,9 @@ Compaction* CompactionPicker::MergeFileSlices(
     for (auto* file_meta : level_input_files.files) {
       file_slices_num += file_meta->file_slices.size();
     }
-
+    std::cout<<"compaction_picker.cc_412 file_slice_num is: "<<file_slices_num
+            <<" level_input_files.files.size(): "<<level_input_files.files.size()<<std::endl;//cyf add for testing
+    std::cout<<"The fileslice threshold is:"<<mutable_cf_options.compaction_options_2pc.merge_threshold<<std::endl;//cyf for testing
     if (file_slices_num / level_input_files.files.size() 
       > mutable_cf_options.compaction_options_2pc.merge_threshold) {
     input_files.push_back(level_input_files);

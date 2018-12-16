@@ -108,7 +108,7 @@ class VersionStorageInfo {
 
   void AddFrozenFile(int level, uint64_t file_number, FileMetaData* f);
 
-  void AddFileSlice(int level, FileMetaData* f, FileSlice& fs, FileMetaData* pre_file = nullptr, 
+  void AddFileSlice(int level, FileMetaData* f, FileSlice& fs, FileMetaData* pre_file = nullptr,
                     Logger* info_log = nullptr);
 
   void SetFinalized();

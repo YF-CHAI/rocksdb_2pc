@@ -2607,6 +2607,7 @@ void VerifyDBFromDB(std::string& truth_db_name) {
 
         for (int i = 0; i < num_warmup; i++) {
           RunBenchmark(num_threads, name, method);
+          std::cout<<"db_bench_tool line 2610: RunBenchmark(num_threads, name, method);"<<std::endl;//cyf test
         }
 
         if (num_repeat > 1) {
@@ -2617,6 +2618,8 @@ void VerifyDBFromDB(std::string& truth_db_name) {
         for (int i = 0; i < num_repeat; i++) {
           Stats stats = RunBenchmark(num_threads, name, method);
           combined_stats.AddStats(stats);
+          std::cout<<"db_bench_tool line:2612 Stats stats = RunBenchmark(num_threads, name, method);"<<std::endl;
+          usleep(1000*1000);//cyf for test
         }
         if (num_repeat > 1) {
           combined_stats.Report(name);
@@ -3606,6 +3609,11 @@ void VerifyDBFromDB(std::string& truth_db_name) {
       for (int64_t j = 0; j < entries_per_batch_; j++) {
         int64_t rand_num = key_gens[id]->Next();
         GenerateKeyFromInt(rand_num, FLAGS_num, &key);
+        if(1){
+            std::cout<<"\n the_writerandom_key_is: "<<rand_num<<std::endl;//cyf for debug read lost
+            //printf("%" PRId64 " ",rand_num);
+            //std::cout<<std::endl;
+        }
         if (use_blob_db_) {
 #ifndef ROCKSDB_LITE
           Slice val = gen.Generate(value_size_);
@@ -3676,12 +3684,13 @@ void VerifyDBFromDB(std::string& truth_db_name) {
                                 entries_per_batch_, kWrite);
       if (!s.ok()) {
         fprintf(stderr, "put error: %s\n", s.ToString().c_str());
+        std::cout<<"db_bench_tool.cc line:3684 write has error!"<<std::endl;//cyf for testing
         exit(1);
       }
       //usleep(1);// cyf sleep for 1 us
     }
     thread->stats.AddBytes(bytes);
-    usleep(1000);// cyf sleep for 1 ms
+    //usleep(1000);// cyf sleep for 1 ms
   }
 
   Status DoDeterministicCompact(ThreadState* thread,
@@ -4149,6 +4158,12 @@ void VerifyDBFromDB(std::string& truth_db_name) {
       // is done in DoWrite method.
       int64_t key_rand = GetRandomKey(&thread->rand);
       GenerateKeyFromInt(key_rand, FLAGS_num, &key);
+      if(1){
+          std::cout<<"\n the_readrandom_key_is: "<<key_rand<<std::endl;//cyf for debug read lost
+          //printf("%" PRId64 " ",key_rand);
+          //std::cout<<std::endl;
+      }
+
       read++;
       Status s;
       uint64_t start = db_with_cfh->db->GetEnv()->NowMicros();
@@ -4173,11 +4188,11 @@ void VerifyDBFromDB(std::string& truth_db_name) {
         if(1){
         //const char *st = s.getState();
         //printf("the fail status is:%s\n",st);
-        printf("the status code: %d,subcode: %d\n",(int)s.code(),(int)s.subcode());
+        //printf("the status code: %d,subcode: %d\n",(int)s.code(),(int)s.subcode());
         lost++;
-        std::cout<<"the lost key is:";//cyf for debug read lost
-        printf("%" PRId64 " ",key_rand);
-        for(int i=0;i<key.size();i++) printf("0x%02X ",key[i] & 0xff);
+        std::cout<<"\n the readlost_key_is: "<<key_rand<<std::endl;//cyf for debug read lost
+        //printf("%" PRId64 " ",key_rand);
+        //for(int i=0;i<key.size();i++) printf("0x%02X ",key[i] & 0xff);//cyf for test
         std::cout<<std::endl;
         //printf(" the key address is:%p\n",key[0]);
         }//cyf end if(1) for testing
@@ -4202,7 +4217,7 @@ void VerifyDBFromDB(std::string& truth_db_name) {
     }
 
     std::cout << "found_time:" << found_time << " not_found_time:" << not_found_time 
-        << " reset_pinnable:" << reset_pinnable << "lost key num:"<<lost<<std::endl;
+        << " reset_pinnable:" << reset_pinnable << " lost key num:"<<lost<<std::endl;
     char msg[100];
     snprintf(msg, sizeof(msg), "(%" PRIu64 " of %" PRIu64 " found)\n",
              found, read);

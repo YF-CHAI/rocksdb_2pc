@@ -864,7 +864,7 @@ Compaction* ColumnFamilyData::PickCompaction(
   }
 
   if (result == nullptr) {
-    std::cout << "ColumnFamilyData::PickCompaction : come to origin compaction" << std::endl;
+    std::cout << "\n ColumnFamilyData::PickCompaction : come to origin compaction" << std::endl;
     result = compaction_picker_->PickCompaction(
         GetName(), mutable_options, current_->storage_info(), log_buffer);
   } else {

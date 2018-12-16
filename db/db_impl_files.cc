@@ -369,7 +369,7 @@ void DBImpl::PurgeObsoleteFiles(const JobContext& state, bool schedule_only) {
   // We may ignore the dbname when generating the file names.
   const char* kDumbDbName = "";
   for (auto file : state.sst_delete_files) {
-    std::cout << "DBImpl::PurgeObsoleteFiles file number:" << file->fd.GetNumber() << std::endl; 
+    std::cout << "\n DBImpl::PurgeObsoleteFiles file number:" << file->fd.GetNumber() << std::endl;
     candidate_files.emplace_back(
         MakeTableFileName(kDumbDbName, file->fd.GetNumber()),
         file->fd.GetPathId());

@@ -591,7 +591,7 @@ class LevelFileIteratorState : public TwoLevelIteratorState {
       list[num++] = static_cast<InternalIterator*>(new FileSliceIterator(file_meta->file_slices[i], file_iter, icomparator_));
     }
 
-    std::cout << "NewSecondaryIterator : compensated_file_size:" << file_meta->compensated_file_size 
+    std::cout << "\n NewSecondaryIterator : compensated_file_size:" << file_meta->compensated_file_size
       << " raw_size:" << file_meta->raw_key_size + file_meta->raw_value_size << std::endl;
     list[num++] = table_cache_->NewIterator(
           read_options_, env_options_, icomparator_, file_meta->fd, range_del_agg_,
